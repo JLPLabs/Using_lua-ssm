@@ -33,6 +33,11 @@ A comment on time...
 API
 ---
 
+``after(self: Channel, d: Duration, kvs: table) -> number``
+  **A Channel method**
+
+  It schedules a delayed assignment of the values to the keys defined in kvs. The delay, d, is a Duration value. Calling ``after()`` is non-blocking.
+
 ``as_msec(d: Duration|Timestamp) -> number``
   Converts Duration to number of msec
 
@@ -51,11 +56,22 @@ API
 
   If ``func`` has been added to ``ssm`` then can use method format: ``func:defer(...)``
 
+``get(self: Channel) -> number``
+  **A Channel method**
+
+  Gets the channel self[1] value.
+
 ``ipairs(t: table) -> ipairs iterator``
   An ipairs iterator that works for table with overloaded __ipairs
 
 ``msec(t: number) -> Duration``
   Converts numer of milliseconds to Duration.
+
+``never: inf``
+   Timestamp representing the end of time; larger than any other timestamp.
+
+``now() -> Timestamp``
+  Obtains the current logical time.
 
 ``nsec(t: number) -> Duration``
   Converts numer of nanoseconds to Duration.
@@ -74,12 +90,30 @@ API
 
   If ``func`` has been added to ``ssm`` then can use method format: ``func:spawn(...)``
 
+``start(entry: func(T...): R, ...: T ) -> time: LogicalTime, val: R``
+  Executes the entry in a synchronous context, starting at time == 0. Can pass agruments ``...``. Returns the completion time and the return value of type R.
+
 ``unpack(t: table, i: number|nil)  -> ...``
   A table unpack that works for table with overloaded __index
 
 ``usec(t: number) -> Duration``
   Converts numer of microseconds to Duration.
 
+``wait(wait_spec: Table|{Table}): {boolean}``
+  Wait for one or more channel tables to be updated. Returns a list of booleans, where ``true`` indicates which wait specificications were met.
+  
+  Wait for updates on some number of channel tables.
+  Each argument is a "wait specification", which is either be a channel table
+  or an array of channel tables. A wait specification is satisfied when all
+  channel tables therein have been assigned to (not necessarily in the same
+  instant).
+
+  wait() unblocks when at least one wait specification is satisfied. It will
+  return multiple boolean return values, positionally indicating whether each
+  wait specification in the argument was satisfied.
+
+  In other words, wait(a, {b, c}) will unblock when a is updated, or both
+  b and c are updated.
 
 Type Definitions
 ----------------
@@ -92,16 +126,6 @@ Event                          A synchronization primitive used for signaling be
 Process                        Represents a running SSM process with access to time and control flow.
 =============================  ====================================================
 
-
-Logical Time Constants
-----------------------
-
-=============================  ====================================================
-Constant                       Description
-=============================  ====================================================
-never: LogicalTime             A timestamp representing the end of time.
-always: LogicalTime            A timestamp representing the beginning of time.
-=============================  ====================================================
 
 
 Duration Type
@@ -135,37 +159,3 @@ __lt__(LogicalTime) -> boolean   Checks if one logical time is earlier than anot
 __le__(LogicalTime) -> boolean   Checks if one logical time is earlier or equal.
 ===============================  ====================================================
 
-Routine Class
--------------
-
-===============================  ====================================================
-Method Signature                 Description
-===============================  ====================================================
-Routine(...) -> Routine          Represents an SSM routine.
-__call__(...) -> any             Calls the routine directly.
-spawn(...) -> Process            Spawns the routine in a new process.
-defer(...) -> Process            Defers the routine to a lower priority process.
-===============================  ====================================================
-
-Event Class
------------
-
-===============================  ====================================================
-Method Signature                 Description
-===============================  ====================================================
-signal()                         Signals the event.
-wait()                           Waits for the event to be signaled.
-is_signaled -> boolean           Returns whether the event has been signaled.
-===============================  ====================================================
-
-Process Class
--------------
-
-===============================  ====================================================
-Properties and Methods           Description
-===============================  ====================================================
-time: LogicalTime                Current logical time of the process.
-sleep(d: Duration)               Suspends the process for a duration.
-await(e: Event)                  Waits for an event to be signaled.
-spawn(r: Routine) -> Process     Spawns a new process to run a routine.
-===============================  ====================================================
