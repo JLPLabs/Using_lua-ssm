@@ -22,20 +22,25 @@ Event                          A synchronization primitive used for signaling be
 Process                        Represents a running SSM process with access to time and control flow.
 =============================  ====================================================
 
-Time Utilities
---------------
+Time Resolution
+---------------
 
-===============================  ================================================
-Function Signature               Description
-===============================  ================================================
-nsec(t: number) -> Duration      Converts a number to nanoseconds.
-usec(t: number) -> Duration      Converts a number to microseconds.
-msec(t: number) -> Duration      Converts a number to milliseconds.
-sec(t: number) -> Duration       Converts a number to seconds.
-min(t: number) -> Duration       Converts a number to minutes.
-hr(t: number) -> Duration        Converts a number to hours.
-days(t: number) -> Duration      Converts a number to days.
-===============================  ================================================
+  "The core library is resolution-agnostic, but for cross-platform accuracy we
+  will standardize to nanoseconds as our base resolution. Each backend will
+  need to adjust from nanoseconds accordingly."
+
+========================================  ================================================
+Function Signature                        Description
+========================================  ================================================
+nsec(t: number) -> Duration               Converts numer of nanoseconds to Duration.
+usec(t: number) -> Duration               Converts numer of microseconds to Duration.
+msec(t: number) -> Duration               Converts numer of milliseconds to Duration.
+sec(t: number)  -> Duration               Converts numer of seconds to Duration.
+as_nsec(d: Duration|Timestamp) -> number  Converts Duration to number of nsec
+as_usec(d: Duration|Timestamp) -> number  Converts Duration to number of usec
+as_msec(d: Duration|Timestamp) -> number  Converts Duration to number of msec
+as_sec(d: Duration|Timestamp)  -> number  Converts Duration to number of sec
+========================================  ================================================
 
 Logical Time Constants
 ----------------------
