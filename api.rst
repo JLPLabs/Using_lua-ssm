@@ -22,6 +22,20 @@ Event                          A synchronization primitive used for signaling be
 Process                        Represents a running SSM process with access to time and control flow.
 =============================  ====================================================
 
+Utlity Functions
+----------------
+
+The "lua" library in `ssm/lib/lua.lua` exists solely to provide these helpers.
+
+========================================  ================================================
+Function Signature                        Description
+========================================  ================================================
+ipairs(t: table) -> ipairs iterator       an ipairs iterator that works for table with overloaded __ipairs
+pairs(t: table) -> pairs iterator         a pairs iterator that works for table with overloaded __pairs
+unpack(t: table, i: number|nil)  -> ...   a table unpack that works for table with overloaded __index
+========================================  ================================================
+
+
 Time Resolution
 ---------------
 
