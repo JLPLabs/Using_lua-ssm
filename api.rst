@@ -9,23 +9,34 @@ including modules for scheduling, simulation, priority management, and reactive 
   NOTE   This API reference was converted from Lua source annotated with
          LDoc and EmmyLua comments, with assistance from Microsoft Copilot.
 
-Type Definitions
+
+
+Time Definitions
 ----------------
+
+These definitions can be found in ``lua-ssm/lua/ssm/core.lua``, with a few details extrapolated by the author.
+
+::
+
+  Comments/questions:
+  [?] why is Duration an ``integer`` and Timestamp a ``number`` ?
 
 =============================  ====================================================
 Type                           Description
 =============================  ====================================================
-Duration                       Represents a span of logical time, measured in ticks.
+Duration                       An ``integer``, represents a span of time (logical or physical), measured in ticks.
 LogicalTime                    Represents a point in logical time, comparable and arithmetic.
-Routine                        A callable object representing a schedulable SSM routine.
-Event                          A synchronization primitive used for signaling between processes.
-Process                        Represents a running SSM process with access to time and control flow.
+PhysicalTime                   Represents a point in "wall-clock" time
+Timestamp                      A ``number``, represents a point in time (either logical or physical) 
 =============================  ====================================================
+
+``ipairs(t: table) -> ipairs iterator``
+  An ipairs iterator that works for table with overloaded __ipairs
 
 Utlity Functions
 ----------------
 
-The "lua" library in `ssm/lib/lua.lua` exists solely to provide these helpers.
+The "lua" library in ``lua-ssm/lua/ssm/lib/lua.lua`` exists solely to provide these helpers.
 
 ========================================  ================================================
 Function Signature                        Description
@@ -41,7 +52,7 @@ Time Resolution
 
   "The core library is resolution-agnostic, but for cross-platform accuracy we
   will standardize to nanoseconds as our base resolution. Each backend will
-  need to adjust from nanoseconds accordingly."
+  need to adjust from nanoseconds accordingly." - from ``ssm.lua``
 
 ========================================  ================================================
 Function Signature                        Description
@@ -55,6 +66,18 @@ as_usec(d: Duration|Timestamp) -> number  Converts Duration to number of usec
 as_msec(d: Duration|Timestamp) -> number  Converts Duration to number of msec
 as_sec(d: Duration|Timestamp)  -> number  Converts Duration to number of sec
 ========================================  ================================================
+
+Type Definitions
+----------------
+
+=============================  ====================================================
+Type                           Description
+=============================  ====================================================
+Routine                        A callable object representing a schedulable SSM routine.
+Event                          A synchronization primitive used for signaling between processes.
+Process                        Represents a running SSM process with access to time and control flow.
+=============================  ====================================================
+
 
 Logical Time Constants
 ----------------------
