@@ -62,7 +62,7 @@ API
 ``as_usec(d: Duration|Timestamp): number``
   Converts Duration to number of usec
 
-``defer(f: function, ...: any)``
+``defer(f: function, ...: any): CTable``
   Create a process from a function and passes it the remaining arguments (...), at a lower priority than the caller.
   The newly spawned process will executes its inaugural instant after the caller waits or terminates.
 
@@ -110,17 +110,6 @@ API
 ``sec(t: number) : Duration``
   Converts numer of seconds to Duration.
 
-``spawn(f: function, ...: any)``
-  Create a process from a function and passes it the remaining arguments (...), at a higher priority than the caller.
-  The caller will suspend as the newly spawned process executes its inaugural
-  instant; the caller will resume execution in the same instant after the new
-  process waits or terminates.
-
-  If f has been added to ``ssm`` then can use method format: ``f:spawn(...)``
-
-``start(entry: function(...: any): R, ...: any ): time: LogicalTime, val: R``
-  Executes the entry in a synchronous context, starting at time == 0. Can pass agruments ``...``. Returns the completion time and the return value of type R.
-
 ``set(self: CTable, val: any)``
   **A Channel method**
 
@@ -131,6 +120,18 @@ API
 
 ``set_passive()``
   Mark the current running process as passive.
+
+``spawn(f: function, ...: any): CTable``
+  Create a process from a function and passes it the remaining arguments (...), at a higher priority than the caller.
+  The caller will suspend as the newly spawned process executes its inaugural
+  instant; the caller will resume execution in the same instant after the new
+  process waits or terminates.
+
+  If f has been added to ``ssm`` then can use method format: ``f:spawn(...)``
+
+``start(entry: function(...: any): R, ...: any ): time: LogicalTime, val: R``
+  Executes the entry in a synchronous context, starting at time == 0. Can pass agruments ``...``.
+  Returns the completion time and the return value of type R.
 
 ``unpack(t: table, i: number|nil): ...``
   A table unpack that works for table with overloaded __index
